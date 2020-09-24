@@ -3,18 +3,23 @@ import './App.scss';
 
 import { Canvas, useFrame } from 'react-three-fiber';
 
-import { softShadows } from 'drei';
+import { softShadows, MeshWobbleMaterial, OrbitControls } from 'drei';
 
 softShadows()
   ;
-const SpinningMesh = ({ position, args, color }) => {
+const SpinningMesh = ({ position, args, color, speed }) => {
   const mesh = useRef(null);
   useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += 0.01));
 
   return (
     <mesh castShadow position={position} ref={mesh} >
       <boxBufferGeometry attach='geometry' args={args} />
-      <meshStandardMaterial attach='material' color={color} />
+      <MeshWobbleMaterial
+        attach='material'
+        color={color}
+        speed={speed}
+        factor={0.6}
+      />
     </mesh >
   );
 }
@@ -52,9 +57,10 @@ function App() {
           </mesh>
         </group>
 
-        <SpinningMesh position={[0, 1, 0]} args={[3, 2, 1]} color='#a8ceef' />
-        <SpinningMesh position={[-2, 1, -5]} color='#c9a2a5' />
-        <SpinningMesh position={[5, 1, -2]} color='#c19869' />
+        <SpinningMesh position={[0, 1, 0]} args={[3, 2, 1]} color='#a8ceef' speed={2} />
+        <SpinningMesh position={[-2, 1, -5]} color='#c9a2a5' speed={6} />
+        <SpinningMesh position={[5, 1, -2]} color='#c19869' speed={6} />
+        <OrbitControls />
       </Canvas>
     </>
   );
